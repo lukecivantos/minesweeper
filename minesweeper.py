@@ -1,4 +1,9 @@
-import sys,pygame
+import sys
+
+import pygame
+from pygame import init
+from pygame.locals import *
+
 from random import sample   
 
 from board import Board
@@ -6,25 +11,32 @@ from board import Board
 
 class Minesweeper: 
     def __init__(self): 
-        pygame.init()
         self.width = 400
-        self.height = 300
+        self.height = 600
         self.size = (self.width, self.height)
-        self.black = 0, 0, 0
-        self.displayGame()
+
+        self.runGame()
       
     def generateGame(self): 
         self.board = Board(80,90,15)    
 
-    def displayGame(self): 
-        screen = pygame.display.set_mode(self.size)
-        screen.fill(self.black)
-        block_size = 3
-        color = 14,12,1
-        for y in range(self.height):
-            for x in range(self.width):
-                rect = pygame.Rect(x*block_size, y*block_size, block_size, block_size)
-                pygame.draw.rect(screen, color, rect)
-        while True: 
-            pass
+    def runGame(self): 
+        init()
+
+        #populate screen
+        self.screen = pygame.display.set_mode(self.size)
+        self.screen.fill((0,0,0))
+
+        running = True
+        while running: 
+            for event in pygame.event.get(): 
+                if event.type == KEYDOWN: 
+                    if event.key == K_ESCAPE: 
+                        running = False
+                elif event.type == QUIT: 
+                    running = False
+            
+                
+
+
 Minesweeper()

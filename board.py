@@ -19,13 +19,18 @@ class Board:
         self.bombs = sample(allKeys, numBombs)
         for bomb in self.bombs: 
             self.board[bomb] = None
-        print(self.bombs)
 
     def checkBomb(self, i, j):
         if self.board[(i,j)] == None: 
             return True 
         return False 
 
-    
+    def displayBoard(self): 
+        pass
+    def updateBoard(self):
+        pass
+
+
+
 board = Board(80,90,15)    
 
