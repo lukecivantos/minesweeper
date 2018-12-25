@@ -28,24 +28,30 @@ class Board:
 
     def updateBoard(self, i, j): 
         queue = [(i,j)]
+        visited = set()
         while queue: 
             node = queue.pop(0)
             neighbors = self.getNeighbors(node[0],node[1])
             totalBombs = 0
+            tmp = []
             for neighbor in neighbors: 
                 if self.board[neighbor] == None: 
                     totalBombs += 1
                 else:   
-                    queue.append(neighbor)
-            self.board[(i,j)] = totalBombs
-            self.visible[(i,j)] = 1
+                    if neighbor not in visited: 
+                        tmp.append(neighbor)
+                        visited.add(neighbor)
+            if totalBombs == 0: 
+                queue.extend(tmp)
+            self.board[node] = totalBombs
+            self.visible[node] = 1
 
     def getNeighbors(self, i, j): 
-        coords = [(i-1,j-1), (i-1,j), (i,j-1), (i+1,j), (i,j+1), (i+1,j+1)]
+        coords = [(i-1,j-1), (i-1,j), (i,j-1), (i+1,j), (i,j+1), (i-1,j+1), (i+1, j-1),  (i+1,j+1)]
         neighbors = []
         for neighbor in coords: 
             a,b = neighbor
-            if a > 0 and b > 0 and a < len(self.board) - 1 and b < len(self.board[0]) - 1: 
+            if a > 0 and b > 0 and a < self.height - 1 and b < self.width - 1: 
                 if self.visible[neighbor] == 0: 
                     neighbors.append(neighbor)
         return neighbors

@@ -29,7 +29,7 @@ class Minesweeper:
                         running = False
                 elif event.type == MOUSEBUTTONUP:
                     pos = pygame.mouse.get_pos()
-                    pos = (((pos[0]*25)/630),((pos[1]*16)/405))
+                    pos = (((pos[1]*16)/405), ((pos[0]*25)/630)) 
                     if self.board.visible[pos] != 1: 
                         self.clickCell(pos)
                 elif event.type == QUIT: 
@@ -69,20 +69,32 @@ class Minesweeper:
                         color = RED
                     else: 
                         color = GREEN
-                pygame.draw.rect(self.screen,
+
+                curRect = pygame.draw.rect(self.screen,
                                 color,
                                 [(MARGIN + WIDTH) * column + MARGIN,
                                 (MARGIN + HEIGHT) * row + MARGIN,
                                 WIDTH,
                                 HEIGHT])
+
+                num = self.board.board[(row,column)]
+                if num != None and num != 0: 
+                    font = pygame.font.Font(pygame.font.get_default_font(), 12)
+                    text = font.render("1", True, (0xff, 0xff, 0xff))
+                    text_rect = text.get_rect()
+                    text_rect.center = curRect.center
+
         pygame.display.flip()
 
     def clickCell(self, pos):
         i,j = pos
         if self.board.checkBomb(i,j): 
-            #EndGame
             self.board.endGame()
-            
+            self.updateBoard()
+        else: 
+            self.board.updateBoard(i,j)
+            self.updateBoard()
+
         
 
 
