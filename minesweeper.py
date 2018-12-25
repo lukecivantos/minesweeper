@@ -79,10 +79,11 @@ class Minesweeper:
 
                 num = self.board.board[(row,column)]
                 if num != None and num != 0: 
-                    font = pygame.font.Font(pygame.font.get_default_font(), 12)
-                    text = font.render("1", True, (0xff, 0xff, 0xff))
-                    text_rect = text.get_rect()
-                    text_rect.center = curRect.center
+                    font = pygame.font.Font(pygame.font.get_default_font(), 20)
+                    text = font.render(str(num), 1, (10, 10, 10))
+                    textpos = text.get_rect()
+                    print(curRect)
+                    self.screen.blit(text, curRect)
 
         pygame.display.flip()
 
