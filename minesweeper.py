@@ -29,10 +29,11 @@ class Minesweeper:
                         running = False
                 elif event.type == MOUSEBUTTONUP:
                     pos = pygame.mouse.get_pos()
-                    print(pos)
+                    pos = (((pos[0]*25)/630),((pos[1]*16)/405))
+                    if self.board.visible[pos] != 1: 
+                        self.clickCell(pos)
                 elif event.type == QUIT: 
                     running = False
-
 
     def displayBoard(self): 
         init()
@@ -76,8 +77,13 @@ class Minesweeper:
                                 HEIGHT])
         pygame.display.flip()
 
-    def getCell(self, i, j):
-        pass
+    def clickCell(self, pos):
+        i,j = pos
+        if self.board.checkBomb(i,j): 
+            #EndGame
+            self.board.endGame()
+            
+        
 
 
 

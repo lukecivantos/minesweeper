@@ -50,6 +50,10 @@ class Board:
                     neighbors.append(neighbor)
         return neighbors
 
+    def endGame(self): 
+        for i in range(self.height): 
+            for j in range(self.width): 
+                self.visible[(i,j)] = 1
 
 board = Board(80,90,15)    
 
