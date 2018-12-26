@@ -10,17 +10,19 @@ from board import Board
 
 class Minesweeper: 
     def __init__(self): 
-        self.pixelWidth = 630
-        self.pixelHeight = 405
 
-        self.boardWidth = 25
-        self.boardHeight = 16
+        self.boardWidth = 15
+        self.boardHeight = 25
 
         self.cellWidth = 20
         self.cellHeight = 20
 
         self.numBombs = 40
         self.margin = 5
+
+        self.pixelHeight  = (self.boardHeight*(self.cellHeight + self.margin)) + self.margin
+        self.pixelWidth = (self.boardWidth*(self.cellWidth + self.margin)) + self.margin
+
         self.won = False
         self.lost = False
         self.runGame()
@@ -55,7 +57,7 @@ class Minesweeper:
                             continue
 
                         pos = pygame.mouse.get_pos()
-                        pos = (((pos[1]*16)/405), ((pos[0]*25)/630)) 
+                        pos = (((pos[1]*self.boardHeight)/self.pixelHeight), ((pos[0]*self.boardWidth)/self.pixelWidth)) 
                         if self.board.visible[pos] == 0: 
                             self.clickCell(pos)
                             if self.won: 
@@ -69,7 +71,7 @@ class Minesweeper:
         self.screen = pygame.display.set_mode((self.pixelWidth, self.pixelHeight))
         pygame.display.set_caption("Minesweeper")
 
-        self.board = Board(16,25,80) 
+        self.board = Board(self.boardHeight, self.boardWidth, self.numBombs) 
         self.updateBoard()
 
     def updateBoard(self):
