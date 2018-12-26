@@ -36,25 +36,27 @@ class Board:
             neighbors = self.getNeighbors(node[0],node[1])
             totalBombs = 0
             tmp = []
+            tmpVisited = set()
             for neighbor in neighbors: 
                 if self.board[neighbor] == None: 
                     totalBombs += 1
                 else:   
                     if neighbor not in visited: 
                         tmp.append(neighbor)
-                        visited.add(neighbor)
+                        tmpVisited.add(neighbor)
             if totalBombs == 0: 
                 queue.extend(tmp)
+                visited.update(tmpVisited)
             self.board[node] = totalBombs
             self.visible[node] = 1
 
     def getNeighbors(self, i, j): 
-        coords = [(i-1,j-1), (i-1,j), (i,j-1), (i+1,j), (i,j+1), (i-1,j+1), (i+1, j-1),  (i+1,j+1)]
+        coords = [(i-1,j-1), (i-1,j), (i-1, j+1), (i,j-1), (i,j), (i,j+1), (i+1,j-1), (i+1, j),  (i+1,j+1)]
         neighbors = []
         for neighbor in coords: 
             a,b = neighbor
             if a > 0 and b > 0 and a < self.height - 1 and b < self.width - 1: 
-                if self.visible[neighbor] == 0: 
+                if self.visible[neighbor] == 0 or self.visible[neighbor] == 2: 
                     neighbors.append(neighbor)
         return neighbors
 
