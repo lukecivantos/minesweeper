@@ -29,6 +29,7 @@ class Board:
             return True 
         return False 
 
+    #BFS to find all nearby empty cells
     def updateBoard(self, i, j): 
         queue = [(i,j)]
         visited = set()
