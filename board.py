@@ -55,7 +55,7 @@ class Board:
         neighbors = []
         for neighbor in coords: 
             a,b = neighbor
-            if a > 0 and b > 0 and a < self.height - 1 and b < self.width - 1: 
+            if a >= 0 and b >= 0 and a <= self.height - 1 and b <= self.width - 1: 
                 if self.visible[neighbor] == 0 or self.visible[neighbor] == 2: 
                     neighbors.append(neighbor)
         return neighbors
