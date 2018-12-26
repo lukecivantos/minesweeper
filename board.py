@@ -5,9 +5,11 @@ class Board:
     def __init__(self, height, width, numBombs): 
         self.board = {}
         self.visible = {}
+        self.numBombs = numBombs
         self.height,self.width = height,width
         self.populateBoard(height,width)
         self.setBombs(numBombs)
+        self.totalFlagged = 0
     
     def populateBoard(self, height, width):
         for i in range(height): 
@@ -60,3 +62,11 @@ class Board:
         for i in range(self.height): 
             for j in range(self.width): 
                 self.visible[(i,j)] = 1
+        
+    def flagCell(self, i, j):
+        if self.visible[(i,j)] == 2: 
+            self.visible[(i,j)] = 0
+            self.totalFlagged -= 1
+        else: 
+            self.visible[(i,j)] = 2
+            self.totalFlagged += 1
