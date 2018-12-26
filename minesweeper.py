@@ -39,13 +39,13 @@ class Minesweeper:
                     else:    
                         if self.lost == True: 
                             self.lost = False
-                            self.board = Board(16,25,80) 
+                            self.board = Board(16,25,60) 
                             self.updateBoard()
                             continue
 
                         pos = pygame.mouse.get_pos()
                         pos = (((pos[1]*16)/405), ((pos[0]*25)/630)) 
-                        if self.board.visible[pos] != 1: 
+                        if self.board.visible[pos] == 0: 
                             self.clickCell(pos)
                             if self.won: 
                                 print("You Won!")
@@ -119,7 +119,7 @@ class Minesweeper:
             self.board.updateBoard(i,j)
             self.updateBoard()
             self.totalVisible += 1
-            if self.totalVisible == 320: 
+            if self.totalVisible == 340: 
                 self.won = True
 
     def flagCell(self,pos):
