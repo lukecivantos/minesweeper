@@ -10,6 +10,7 @@ class Board:
         self.populateBoard(height,width)
         self.setBombs(numBombs)
         self.totalFlagged = 0
+        
     
     def populateBoard(self, height, width):
         for i in range(height): 
@@ -59,6 +60,13 @@ class Board:
                 if self.visible[neighbor] == 0 or self.visible[neighbor] == 2: 
                     neighbors.append(neighbor)
         return neighbors
+
+    def getNumVisible(self): 
+        totalVisible = 0
+        for x in self.visible: 
+            if self.visible[x] == 1: 
+                totalVisible += 1
+        return totalVisible
 
     def endGame(self): 
         for i in range(self.height): 

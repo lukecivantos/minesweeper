@@ -1,7 +1,6 @@
 import sys
 
 import pygame
-from pygame import init
 from pygame.locals import *
 
 from random import sample   
@@ -13,8 +12,12 @@ class Minesweeper:
     def __init__(self): 
         self.width = 630
         self.height = 405
+        self.boardWidth = 25
+        self.boardHeight = 16
+        self.cellWidth = 20
+        self.cellHeight = 20
+        self.numBombs = 40
         self.margin = 5
-        self.totalVisible = 0
         self.won = False
         self.size = (self.width, self.height)
         self.lost = False
@@ -24,22 +27,28 @@ class Minesweeper:
     def runGame(self): 
         self.displayBoard()
 
+        RIGHTCLICK = 3
+        LEFTCLICK = 1
         running = True
+
+
         while running: 
             for event in pygame.event.get(): 
                 if event.type == KEYDOWN: 
                     if event.key == K_ESCAPE: 
                         running = False
                 elif event.type == MOUSEBUTTONUP:
-                    if event.button == 3: 
+                    if event.button == RIGHTCLICK: 
                         pos = pygame.mouse.get_pos()
-                        pos = (((pos[1]*16)/405), ((pos[0]*25)/630)) 
+                        pos = (((pos[1]*self.boardHeight)/self.height), ((pos[0]*self.boardWidth)/self.width)) 
                         if self.board.visible[pos] != 1: 
                             self.flagCell(pos)
-                    else:    
+                    elif event.button == LEFTCLICK:    
                         if self.lost == True: 
                             self.lost = False
-                            self.board = Board(16,25,60) 
+                            self.board = Board(self.boardHeight, 
+                                               self.boardWidth, 
+                                               self.numBombs) 
                             self.updateBoard()
                             continue
 
@@ -53,7 +62,7 @@ class Minesweeper:
                     running = False
 
     def displayBoard(self): 
-        init()
+        pygame.init()
 
         self.screen = pygame.display.set_mode(self.size)
         pygame.display.set_caption("Minesweeper")
@@ -67,32 +76,24 @@ class Minesweeper:
         WHITE = (255, 255, 255)
         GREEN = (0, 255, 0)
         RED = (255, 0, 0)
- 
-        # This sets the WIDTH and HEIGHT of each grid location
-        WIDTH = 20
-        HEIGHT = 20
-        
-        # This sets the margin between each cell
-        MARGIN = 5
-        
+
         self.screen.fill(BLACK)
 
         # Draw the grid
-        for row in range(16):
-            for column in range(25):
+        for row in range(self.boardHeight):
+            for column in range(self.boardWidth):
                 color = WHITE
                 if self.board.visible[(row,column)] == 1: 
                     if self.board.board[(row,column)] == None:
                         color = RED
                     else: 
                         color = GREEN
-
                 curRect = pygame.draw.rect(self.screen,
                                 color,
-                                [(MARGIN + WIDTH) * column + MARGIN,
-                                (MARGIN + HEIGHT) * row + MARGIN,
-                                WIDTH,
-                                HEIGHT])
+                                [(self.margin + self.cellWidth) * column + self.margin,
+                                (self.margin + self.cellHeight) * row + self.margin,
+                                self.cellWidth,
+                                self.cellHeight])
 
                 num = self.board.board[(row,column)]
                 if num != None and num != 0: 
@@ -118,8 +119,8 @@ class Minesweeper:
         else: 
             self.board.updateBoard(i,j)
             self.updateBoard()
-            self.totalVisible += 1
-            if self.totalVisible == 340: 
+            totalVisible = self.board.getNumVisible()
+            if totalVisible == ((self.boardWidth * self.boardHeight) - self.numBombs): 
                 self.won = True
 
     def flagCell(self,pos):
