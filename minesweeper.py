@@ -14,9 +14,12 @@ class Minesweeper:
         self.width = 630
         self.height = 405
         self.margin = 5
+        self.totalVisible = 0
+        self.won = False
         self.size = (self.width, self.height)
-
+        self.lost = False
         self.runGame()
+
       
     def runGame(self): 
         self.displayBoard()
@@ -28,10 +31,24 @@ class Minesweeper:
                     if event.key == K_ESCAPE: 
                         running = False
                 elif event.type == MOUSEBUTTONUP:
-                    pos = pygame.mouse.get_pos()
-                    pos = (((pos[1]*16)/405), ((pos[0]*25)/630)) 
-                    if self.board.visible[pos] != 1: 
-                        self.clickCell(pos)
+                    if event.button == 3: 
+                        pos = pygame.mouse.get_pos()
+                        pos = (((pos[1]*16)/405), ((pos[0]*25)/630)) 
+                        if self.board.visible[pos] != 1: 
+                            self.flagCell(pos)
+                    else:    
+                        if self.lost == True: 
+                            self.lost = False
+                            self.board = Board(16,25,80) 
+                            self.updateBoard()
+                            continue
+
+                        pos = pygame.mouse.get_pos()
+                        pos = (((pos[1]*16)/405), ((pos[0]*25)/630)) 
+                        if self.board.visible[pos] != 1: 
+                            self.clickCell(pos)
+                            if self.won: 
+                                print("You Won!")
                 elif event.type == QUIT: 
                     running = False
 
@@ -41,7 +58,7 @@ class Minesweeper:
         self.screen = pygame.display.set_mode(self.size)
         pygame.display.set_caption("Minesweeper")
 
-        self.board = Board(16,25,100) 
+        self.board = Board(16,25,80) 
         self.updateBoard()
 
     def updateBoard(self):
@@ -79,10 +96,16 @@ class Minesweeper:
 
                 num = self.board.board[(row,column)]
                 if num != None and num != 0: 
-                    font = pygame.font.Font(pygame.font.get_default_font(), 12)
-                    text = font.render("1", True, (0xff, 0xff, 0xff))
-                    text_rect = text.get_rect()
-                    text_rect.center = curRect.center
+                    font = pygame.font.Font(pygame.font.get_default_font(), 20)
+                    text = font.render(str(num), 1, (10, 10, 10))
+                    #textpos = text.get_rect()
+                    self.screen.blit(text, curRect)
+                
+                if self.board.visible[(row,column)] == 2: 
+                    font = pygame.font.Font(pygame.font.get_default_font(), 20)
+                    text = font.render("F", 1, (10, 10, 10))
+                    #textpos = text.get_rect()
+                    self.screen.blit(text, curRect) 
 
         pygame.display.flip()
 
@@ -91,10 +114,18 @@ class Minesweeper:
         if self.board.checkBomb(i,j): 
             self.board.endGame()
             self.updateBoard()
+            self.lost = True
         else: 
             self.board.updateBoard(i,j)
             self.updateBoard()
+            self.totalVisible += 1
+            if self.totalVisible == 320: 
+                self.won = True
 
+    def flagCell(self,pos):
+        i,j = pos
+        self.board.flagCell(i,j)
+        self.updateBoard()
         
 
 
