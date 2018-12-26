@@ -10,16 +10,18 @@ from board import Board
 
 class Minesweeper: 
     def __init__(self): 
-        self.width = 630
-        self.height = 405
+        self.pixelWidth = 630
+        self.pixelHeight = 405
+
         self.boardWidth = 25
         self.boardHeight = 16
+
         self.cellWidth = 20
         self.cellHeight = 20
+
         self.numBombs = 40
         self.margin = 5
         self.won = False
-        self.size = (self.width, self.height)
         self.lost = False
         self.runGame()
 
@@ -40,7 +42,7 @@ class Minesweeper:
                 elif event.type == MOUSEBUTTONUP:
                     if event.button == RIGHTCLICK: 
                         pos = pygame.mouse.get_pos()
-                        pos = (((pos[1]*self.boardHeight)/self.height), ((pos[0]*self.boardWidth)/self.width)) 
+                        pos = (((pos[1]*self.boardHeight)/self.pixelHeight), ((pos[0]*self.boardWidth)/self.pixelWidth)) 
                         if self.board.visible[pos] != 1: 
                             self.flagCell(pos)
                     elif event.button == LEFTCLICK:    
@@ -64,7 +66,7 @@ class Minesweeper:
     def displayBoard(self): 
         pygame.init()
 
-        self.screen = pygame.display.set_mode(self.size)
+        self.screen = pygame.display.set_mode((self.pixelWidth, self.pixelHeight))
         pygame.display.set_caption("Minesweeper")
 
         self.board = Board(16,25,80) 
