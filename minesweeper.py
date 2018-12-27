@@ -11,29 +11,50 @@ from board import Board
 class Minesweeper: 
     def __init__(self): 
 
-        self.boardWidth = 15
-        self.boardHeight = 25
+        runGame = self.getBoardSize()
+        
+        if runGame:
+            self.boardWidth = 15
+            self.boardHeight = 25
 
-        self.cellWidth = 20
-        self.cellHeight = 20
+            self.cellWidth = 20
+            self.cellHeight = 20
 
-        self.numBombs = 40
-        self.margin = 5
+            self.numBombs = 40
+            self.margin = 5
 
-        self.pixelHeight  = (self.boardHeight*(self.cellHeight + self.margin)) + self.margin
-        self.pixelWidth = (self.boardWidth*(self.cellWidth + self.margin)) + self.margin
+            self.pixelHeight  = (self.boardHeight*(self.cellHeight + self.margin)) + self.margin
+            self.pixelWidth = (self.boardWidth*(self.cellWidth + self.margin)) + self.margin
 
-        self.won = False
-        self.lost = False
-        self.runGame()
+            self.won = False
+            self.lost = False
 
-      
+            self.runGame()
+
+    def getBoardSize(self):
+        return True
+
+
+        running = True 
+        while running: 
+            for event in pygame.event.get(): 
+                if event.type == KEYDOWN: 
+                    if event.key == K_ESCAPE: 
+                        running = False
+                elif event.type == MOUSEBUTTONUP: 
+                    pass
+                elif event.type == QUIT: 
+                    running = False
+        return False
+
     def runGame(self): 
         self.displayBoard()
 
         RIGHTCLICK = 3
         LEFTCLICK = 1
         running = True
+
+        
 
 
         while running: 
